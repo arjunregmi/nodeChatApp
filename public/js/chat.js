@@ -8,6 +8,7 @@ const $formLocationButton = document.querySelector("#send-location");
 const $messages = document.querySelector("#messages")
 
 //Templates
+const userMessageTemplate = document.querySelector("#user-message-template").innerHTML
 const messageTemplate = document.querySelector("#message-template").innerHTML
 const locationMessageTemplate = document.querySelector("#location-message-template").innerHTML
 const sidebarTemplate = document.querySelector("#sidebar-template").innerHTML
@@ -42,6 +43,18 @@ if(containerHeight - newMessageHeight <= scrollOffset){
 socket.on("message", (message) => {
   //console.log(message);
   const html = Mustache.render(messageTemplate,{
+    username:message.username,
+      message:message.text,
+      createdAt:moment(message.createdAt).format('hh:mm a')
+  })
+  $messages.insertAdjacentHTML('beforeend',html)
+
+  autoscroll()
+});
+
+socket.on("usermessage", (message) => {
+  //console.log(message);
+  const html = Mustache.render(userMessageTemplate,{
     username:message.username,
       message:message.text,
       createdAt:moment(message.createdAt).format('hh:mm a')
